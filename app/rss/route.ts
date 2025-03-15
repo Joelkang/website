@@ -1,6 +1,5 @@
 import { baseUrl } from "@/sitemap";
 import { listPostsMeta } from "@/lib/content";
-
 export async function GET() {
   const allPosts = await listPostsMeta();
 
