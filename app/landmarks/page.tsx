@@ -11,7 +11,7 @@ export default function Page() {
         Landmarks
       </h1>
       <p className="mb-8">Projects I've worked on</p>
-      <Link href="/work/dala" className="text-5xl">Dala</Link>
+      <Link href="/landmarks/dala" className="text-5xl">Dala</Link>
     </section>
   );
 }
