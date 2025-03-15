@@ -1,17 +1,17 @@
-import { getBlogPosts } from "app/content/data";
+import { listPostsMeta } from "@/lib/content";
 
-export const baseUrl = 'https://portfolio-blog-starter.vercel.app'
+export const baseUrl = "https://joelkang.com";
 
 export default async function sitemap() {
-  let blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
+  const posts = (await listPostsMeta()).map((post) => ({
+    url: post.url,
+    lastModified: post.publishedAt,
   }))
 
-  let routes = ['', '/blog'].map((route) => ({
+  const routes = ["", "/posts", "/work"].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
+    lastModified: new Date().toISOString().split("T")[0],
   }))
 
-  return [...routes, ...blogs]
+  return [...routes, ...posts];
 }

@@ -1,8 +1,13 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 ::selection {
   background-color: #47a3f3;
   color: #fefefe;
+}
+
+@theme {
+  --color-brand: #f47067;
 }
 
 :root {
@@ -33,92 +38,8 @@ html {
   min-width: 360px;
 }
 
-.prose .anchor {
-  @apply absolute invisible no-underline;
-
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
-}
-
 .anchor:hover {
   @apply visible;
-}
-
-.prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
-}
-
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: '#';
-}
-
-.prose *:hover > .anchor {
-  @apply visible;
-}
-
-.prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
-}
-
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
-}
-
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
-}
-
-.prose code span {
-  @apply font-medium;
-}
-
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
-}
-
-.prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
-}
-
-.prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h2 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
-.prose ul {
-  @apply list-disc pl-6;
-}
-
-.prose ol {
-  @apply list-decimal pl-6;
-}
-
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
 }
 
 pre::-webkit-scrollbar {
@@ -131,8 +52,8 @@ pre {
 }
 
 /* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
+input[type="text"],
+input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -147,4 +68,94 @@ table {
 
 .title {
   text-wrap: balance;
+}
+
+@layer utilities {
+  .prose {
+    --tw-prose-bold: currentColor;
+
+    a {
+      @apply underline dark:text-brand transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+    }
+
+    .anchor {
+      @apply absolute invisible no-underline;
+
+      margin-left: -1em;
+      padding-right: 0.5em;
+      width: 80%;
+      max-width: 700px;
+      cursor: pointer;
+
+      &:after {
+        @apply text-neutral-300 dark:text-neutral-700;
+        content: "#";
+      }
+    }
+
+    *:hover > .anchor {
+      @apply visible;
+    }
+
+    pre {
+      @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+    }
+
+    code {
+      @apply px-1 py-0.5 rounded-lg;
+    }
+
+    pre code {
+      @apply p-0;
+      border: initial;
+      line-height: 1.5;
+    }
+
+    code span {
+      @apply font-medium;
+    }
+
+    img {
+      /* Don't apply styles to next/image */
+      @apply m-0;
+    }
+
+    p {
+      @apply my-4 text-neutral-800 dark:text-neutral-200;
+    }
+
+    h1 {
+      @apply text-4xl font-medium tracking-tight mt-6 mb-2;
+    }
+
+    h2 {
+      @apply text-xl font-medium tracking-tight mt-6 mb-2;
+    }
+
+    h3 {
+      @apply text-xl font-medium tracking-tight mt-6 mb-2;
+    }
+
+    h4 {
+      @apply text-lg font-medium tracking-tight mt-6 mb-2;
+    }
+
+    strong {
+      @apply font-semibold;
+    }
+
+    ul {
+      @apply list-disc pl-6;
+    }
+
+    ol {
+      @apply list-decimal pl-6;
+    }
+
+    > :first-child {
+      /* Override removing top margin, causing layout shift */
+      margin-top: 1.25em !important;
+      margin-bottom: 1.25em !important;
+    }
+  }
 }

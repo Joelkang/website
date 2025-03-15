@@ -1,21 +1,23 @@
-import { BlogPosts } from 'app/components/posts'
-
+import { PostsList } from "@/lib/content/posts-list";
+import { listPostsMeta } from "@/lib/content";
+import Colophon from "./colophon.mdx";
 export default function Page() {
+  const posts = listPostsMeta();
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        My Portfolio
-      </h1>
-      <p className="mb-4">
-        {`I'm a Vim enthusiast and tab advocate, finding unmatched efficiency in
-        Vim's keystroke commands and tabs' flexibility for personal viewing
-        preferences. This extends to my support for static typing, where its
-        early error detection ensures cleaner code, and my preference for dark
-        mode, which eases long coding sessions by reducing eye strain.`}
-      </p>
+      <h1 className="text-6xl font-semibold">Hi, I'm Joel Kang</h1>
+      <h2 className="mb-8 text-lg">
+        <span className="opacity-30">
+          Product Engineer × Context Cartographer 
+        </span>{" "}
+      </h2>
+      <section className="prose prose-xl leading-normal mb-4">
+        <Colophon />
+      </section>
       <div className="my-8">
-        <BlogPosts />
+        <h2 className="text-xl mb-4 font-semibold">Latest thoughts</h2>
+        <PostsList metaListPromise={posts} show={5} />
       </div>
     </section>
-  )
+  );
 }

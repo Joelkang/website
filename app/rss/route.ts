@@ -1,42 +1,40 @@
-import { baseUrl } from 'app/sitemap'
-import { getBlogPosts } from "app/content/data";
+import { baseUrl } from "@/sitemap";
+import { listPostsMeta } from "@/lib/content";
 
 export async function GET() {
-  let allBlogs = await getBlogPosts()
+  const allPosts = await listPostsMeta();
 
-  const itemsXml = allBlogs
+  const itemsXml = allPosts
     .sort((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1
+      if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
+        return -1;
       }
-      return 1
+      return 1;
     })
     .map(
       (post) =>
         `<item>
-          <title>${post.metadata.title}</title>
-          <link>${baseUrl}/blog/${post.slug}</link>
-          <description>${post.metadata.summary || ''}</description>
-          <pubDate>${new Date(
-            post.metadata.publishedAt
-          ).toUTCString()}</pubDate>
-        </item>`
+          <title>${post.title}</title>
+          <link>${post.url.startsWith("/") ? `${baseUrl}${post.url}` : post.url}</link>
+          <description>${post.summary || ""}</description>
+          <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
+        </item>`,
     )
-    .join('\n')
+    .join("\n");
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
   <rss version="2.0">
     <channel>
-        <title>My Portfolio</title>
+        <title>Joel Kang</title>
         <link>${baseUrl}</link>
-        <description>This is my portfolio RSS feed</description>
+        <description>A history of context cartography</description>
         ${itemsXml}
     </channel>
-  </rss>`
+  </rss>`;
 
   return new Response(rssFeed, {
     headers: {
-      'Content-Type': 'text/xml',
+      "Content-Type": "text/xml",
     },
-  })
+  });
 }

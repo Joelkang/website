@@ -6,21 +6,34 @@
     "start": "next start"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "4.0.0-alpha.13",
+    "@biomejs/biome": "^1.9.4",
+    "@mdx-js/loader": "^3.1.0",
+    "@mdx-js/mdx": "^3.1.0",
+    "@mdx-js/react": "^3.1.0",
+    "@next/mdx": "^15.2.2",
+    "@tailwindcss/postcss": "4.0.14",
+    "@types/mdx": "^2.0.13",
     "@types/node": "20.11.17",
-    "@types/react": "18.2.55",
-    "@types/react-dom": "18.2.19",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
     "@vercel/analytics": "^1.1.3",
     "@vercel/speed-insights": "^1.0.9",
-    "geist": "1.2.2",
+    "clsx": "^2.1.1",
+    "geist": "1.3.1",
     "next": "15.2.2",
-    "next-mdx-remote": "^4.4.1",
-    "postcss": "^8.4.35",
+    "postcss": "^8.5.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sugar-high": "^0.6.0",
-    "tailwindcss": "4.0.0-alpha.13",
-    "typescript": "5.3.3"
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx-frontmatter": "^5.0.0",
+    "sugar-high": "^0.9.3",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "4.0.14",
+    "typescript": "5.8.2"
   },
-  "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
+  "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16"
+  }
 }

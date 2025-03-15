@@ -1,15 +1,13 @@
 import Link from 'next/link'
 
 const navItems = {
-	"/": {
-		name: "home",
-	},
-	"/work": {
-		name: "work",
-	},
-	"/posts": {
-		name: "posts",
-	},
+  "/": { name: "home" },
+  "/thoughts": {
+    name: "thoughts",
+  },
+  "/work": {
+    name: "work",
+  },
 };
 
 export function Navbar() {
@@ -21,7 +19,6 @@ export function Navbar() {
           id="nav"
         >
           <div className="flex flex-row space-x-0 pr-10">
-            <h1 className="text-2xl mr-1 items-center font-bold">Joel Kang</h1>
             {Object.entries(navItems).map(([path, { name }]) => {
               return (
                 <Link
@@ -31,11 +28,11 @@ export function Navbar() {
                 >
                   {name}
                 </Link>
-              )
+              );
             })}
           </div>
         </nav>
       </div>
     </aside>
-  )
+  );
 }
