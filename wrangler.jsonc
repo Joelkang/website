@@ -12,8 +12,8 @@
   },
   "kv_namespaces": [
     {
-      "binding": "website",
-      "id": "f019472e828840a0bb5026a96b36c5a2"
+      "binding": "NEXT_CACHE_WORKERS_KV",
+      "id": "aa0ec1096acf4e04a6ce5e1a37b3d239"
     }
   ],
 }
