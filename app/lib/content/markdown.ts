@@ -24,7 +24,7 @@ async function readMDXFile(dir: string, file: string) {
     type: "mdx",
     id: fullPath,
     slug,
-    url: `/thoughts/${slug}`,
+    url: `/waypoints/${slug}`,
   };
 }
 

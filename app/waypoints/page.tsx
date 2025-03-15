@@ -10,7 +10,10 @@ export default function Page() {
   const posts = listPostsMeta();
   return (
     <section>
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Posts</h1>
+      <h1 className="font-semibold text-6xl tracking-tighter">
+        Waypoints
+      </h1>
+      <p className="mb-8">Discoveries I've made a long the way</p>
       <PostsList metaListPromise={posts} />
     </section>
   );
