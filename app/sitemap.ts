@@ -1,6 +1,6 @@
 import { listPostsMeta } from "@/lib/content";
 
-export const baseUrl = "https://joelkang.com";
+export const baseUrl = process.env.BASE_URL;
 
 export default async function sitemap() {
   const posts = (await listPostsMeta()).map((post) => ({
