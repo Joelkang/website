@@ -1,0 +1,294 @@
+---
+title: 'Reactive Encapsulation: Reusable Components in React'
+publishedAt: '2017-08-27'
+summary: ''
+---
+
+I've been using React for about a year now, and even though its approach of
+writing a user interface as a set of components is not particularly unique when
+compared other libraries and frameworks, React shines in how its components can
+be constructed from both HTML and Javascript. While other libraries tightly
+maintain the long held notion of separating markup from interactivity, React
+chose instead to collapse the two by means of its JSX extension, recognising
+that it makes more sense to draw lines around business-logical considerations
+rather than theoretical concerns.
+
+Writing code that's more modular is not a new exercise for the web, and we've
+gone through our fair share of iterating through what it means to write code
+that follows basic principles like encapsulation and DRY. The problem with
+writing code, however, is that often times we want the best of both worlds:
+components should be consistent yet remain customisable; they should follow a
+design guide, except for my one special use case; they should largely do the
+same thing, except when lighting strikes during a full moon on the winter
+equinox.
+
+Now, this is not really a new problem in programming, and many languages and
+frameworks have solved this with tools such as interfaces and traits, reusable
+behaviours and dependency injection. The underlying principle behind all of
+these solutions is that it's far easier to create small, generic things, and
+compose them together via some contract, than to make an omnipotent God object.
+
+In Javascript, we often struggle to balance competing the needs of reusability
+and modularity, and it hasn't been particularly easy. The fundamental problem
+with thinking about reusable components, is that we think about reusable
+components:
+
+
+To be fair, thinking about isolation is a difficult thing to do since it's often
+difficult to decompose an interactive widget down into all its component parts.
+The parts of it that affect how it looks and those parts that affect how it
+behaves could either be completely isolated or very tightly coupled, and there's
+no real science behind where to draw the line. After all, Earth is a pretty well
+encapsulated planet.
+
+We've been told that thinking about modularity in React is easy, and it is: if a
+component becomes to big, just break it up into smaller parts and `.map()` over
+some normalised data structure for reuse and profit. But what if you have
+components that are intentionally generic and should be reusable across multiple
+apps, all with varying use cases and business needs? It always seems to boil
+down to one of two things:
+
+Config soup: Every use case adds a config specific for its use case with a
+backwards-compatible default. Soon, you have 14 configuration options for a
+single component, some of which only apply if you have that one boolean set to
+true, or if another config is not set. Copy pasta: My use case is different
+enough from your use case that it justifies me copying and pasting your
+implementation and changing it to fit my needs. If there are code-external
+demands for consistency across both components (usually around design and
+accessibility), somebody (who?) will have to know to update both places (how?).
+Soon, you'll have 5 modals and 7 carousels. The modus operandi of web
+components, is that we should stop trying to extend things with features, but
+compose them from smaller, isolated parts. This is not something that relative
+newcomers to React are exposed to, but it does in fact allow us to do that in a
+number of ways. Let's walk though some of these strategies to make our
+components more reusable.
+
+Strategy 1: Inversion of Control While it's always easier to see everything come
+together as a whole before breaking it up into smaller component parts, changing
+the way you think about component design can help make your components flexible
+out of the box.
+
+Instead of having a single component render any number of subcomponents, we can
+think of subcomponents as dependencies to be injected into the subject
+component. This way, the main responsibility of a parent component is to wire up
+the interactions between its subcomponents rather than decide what those
+subcomponents actually look like. When coupled with the `defaultProps` static
+property, inverting the dependencies of a component becomes very easy:
+
+```js
+function OldModalFooter() {
+  return <div>
+    <button className='button button--tertiary'>
+      Cancel
+    </button>
+    <button className='button button--secondary'>
+      Previous
+    </button>
+    <button className='button button--primary'>
+      Next
+    </button>
+  </div>;
+}
+
+// Pass in depedencies instead of instantiating them.
+// Now this modal footer becomes immediately more generic
+function NewModalFooter(props) {
+  return <div className='modal__footer'>
+    { props.tertiaryButton }
+    { props.secondaryButton }
+    { props.primaryButton }
+  </div>;
+}
+
+NewModalFooter.defaultProps = {
+  tertiaryButton = 
+    <button className='button button--tertiary'>
+      Cancel
+    </button>,
+  secondaryButton = 
+    <button className='button button--secondary'>
+      Previous
+    </button>,
+  primaryButton = 
+    <button className='button button--primary'>
+      Next
+    </button>
+};
+
+function MyModal(props) {
+  var isValid = validate(props);
+  return <div>
+    { props.content }
+    <NewModalFooter primaryButton={ 
+        <button disabled={ !isValid } onClick={ props.submit }>Submit</button>
+    } />
+  </div>;
+}
+```
+Designing components this way also forces you to think about the API of your
+component: What is the sole purpose of this component and what does it need in
+order to be able to perform that purpose? What can it leave up to consuming
+components and what does it want to enforce? Could we, for example, even pass in
+`<NewModalFooter />` into `<MyModal />`?
+
+Strategy 2: Hax0rzing the virtual DOM tree with React.cloneElement() But first,
+terminology. We know that React works by maintaining virtual DOMs in memory,
+diffing them against each other in order to figure out what needs re-rendering
+in the browser's DOM. But how do the React components we write actually become
+instantiated into DOM nodes?
+
+Components: What we usually refer to as Components are actually component
+definitions (as opposed to component instances). When you do
+`React.createClass()` or write a pure functional component in JSX, what you're
+writing is a declaration for what a Component should do and look like (hence you
+are creating a class). To render a component, you'd write `<MyComponent />`
+Elements: The JSX compiler than transforms any of these Components (even the
+native browser "components" such as `<div>`s and `<a>`s and `<span>`s) into
+React Elements by transpiling `<MyComponent />` into a
+`React.createElement(MyComponent)` method call. React Elements are
+specifications for how to render a specific node in the virtual DOM tree.
+Elements have a type field, which is either a string representing the native DOM
+element 'div', 'a', 'span', or the actual Component class returned from a
+`React.createClass()` call. Together with a props map, an Element serves as a
+specification for how a specific instance of a component will be rendered in a
+specific place in the tree. To render an Element, you write ` { myElement }` At
+no point do we actually instantiate any React Elements ourselves. All we are
+writing in our JSX files are specifications for what the DOM tree will actually
+look like. We pass this specification to React, who will then internally
+instantiate actual Javascript objects representing a node in the virtual DOM
+tree. When state changes and React re-renders, the same specification is used
+(albeit with different prop values) to create a new virtual DOM for diffing
+against the previous one.
+
+Enter React.cloneElement() What this means is that we can intercept the vDOM
+tree prior to it being passed to React by changing the tree's specification.
+Despite its name, `React.cloneElement()` doesn't have the performance baggage of
+a lot of other types of cloning since you're merely cloning the specification
+for the Element at that point (which is a much smaller object than a DOM node or
+even a virtual DOM tree node). `cloneElement()` shallow-merges any props that
+you want to enforce on this node, allowing you to change or augment existing
+specifications:
+```js
+function EvenNewerModalFooter(props) {
+  return <div className='modal__footer'>
+    { props.tertiaryButton && props.tertiaryButton }
+    { props.secondaryButton && props.secondaryButton }
+    { props.primaryButton && 
+      React.cloneElement(
+        props.primaryButton,
+        {
+          className: props.enforcedPrimaryButtonClassName + ' ' + props.primaryButton.props.className,
+          onClick: function() {
+             trackClick('tracking happened before intended action');
+             props.primaryButton.props.onClick(...arguments);
+          }
+        },
+        <span className='text--capitalize'>
+           { props.children }
+        </span>
+      )  
+    }
+  </div>;
+}
+
+EvenNewerModalFooter.defaultProps = {
+    enforcedPrimaryButtonClassName = 'button button__primary'
+}
+```
+Much like Strategy 1, you don't always have to use cloneElement to allow for
+maximum flexibility: when to enforce props and when to make them overridable in
+a reusable component is more of an art than a science. In this case, we probably
+didn't really need to make `enforcedPrimaryButtonClassName` a default prop in
+order for it to be overridable (which defeats the point of it being enforced).
+But it serves as a good example of how we might use `defaultProps` and
+`cloneElement` to minimise the surface area of our component, and keep it
+customisable for those who need it to be.
+
+Strategy 3: Higher Order Components The last strategy for sharing common
+behaviour is by dynamically extending a Component class's functionality at run
+time with a Higher Order Component (HOC). There's nothing specifically React
+about HOCs since all they are are Component factories: an HOC is a function that
+takes in a Component class as a parameter, and returns a new Component class
+that does something over and above the wrapped Component. It's particularly
+useful for augmenting Components with lifecycle-related functionality, or
+precomposing sets of props for passing into the wrapped Component.
+
+In this example, I create an HOC that wraps a Component with a `<div>` to
+provide closing animations. Typically when you use the `{ isShowing &&
+<MyComponent> }` construction, it's easy to add on-render animations, but
+difficult to add animations around unmounting. Once `isShowing` is false, React
+blows away MyComponent altogether, which means that the MyComponent class has no
+opportunity to handle its own unmount animation:
+```js
+function withAnimateClose(SomeModalClass, closingAnimationClassName) {
+  return class extends React.Component {
+    constructor(props) {
+      this.state = {
+        isClosing: false
+      };
+    }
+    startAnimatingClose() {
+        this.setState({ isClosing: true });
+    }
+    render() {
+      return <SomeModalClass className={ this.props.className + (this.state.isClosing ? ' ' + closingAnimationClassName : '') } 
+                             onClose={ this.startAnimatingClose }
+                             onAnimationEnd={ function(evt) {
+                               if (evt.target === evt.currentTarget && evt.animationName === closingAnimationClassName) { 
+                                 this.props.onClose(); // e.g. a redux action that sets the boolean value to decide whether to render the wrapped component or not
+                               }
+                             }.bind(this) }
+                             {...this.props} />;
+    }
+  };
+}
+
+const ClosingModal = withAnimatedClose(Modal, 'fade-out');
+// `withAnimatedClose` is really just a pure-function Component factory
+// and we can (should!) easily reuse it with other components:
+// ﻿const ClosingPopup = withAnimatedClose(Popup, 'slide-down')﻿
+
+function App(props) {
+  return props.shouldShowModal && <ClosingModal onClose={ function() {
+    props.setShouldShowModal(false);
+  } } />;
+}
+```
+You'll notice, in particular, that I'm clobbering the `onClose` prop that
+`<SomeModalClass>` originally expects, with `startAnimatingClose`. To the
+internal implementation of `<SomeModalClass` it's completely transparent whether
+or not the class was wrapped in an HOC or not.
+
+It's important to recognise the differences between using `cloneElement()` and
+Higher Order Components: the former acts on Elements while the latter acts on
+Component classes. One could certainly wrap or clobber props in both, but HOCs
+provides an entry point into the component lifecycle that `cloneElement()` does
+not. HOCs can thus have and manage their own state with regard to how that
+lifecycle interacts with the wrapped component's lifecycle. `cloneElement()` on
+the other hand, is a lighter touch, allowing you to mutate the props of any
+element (without needing to know its class type) at runtime.
+
+I hope you'll find these strategies useful in thinking about how to build
+reusable functionality. Ultimately, recall that reusability is more about
+composability and encapsulation: if you can decompose something into smaller
+parts, you can write it in a reusable manner. A good side benefit is that future
+engineers (including yourself) who come upon this codebase will thank you when
+they need it to be ever so special.
+
+This article is a condensation of a presentation I gave to engineers working on
+React while doing product development at Etsy. Obviously none of these are my
+ideas, but arose out of my frustration at trying to write plug-and-play
+components. Leave a comment if you have thoughts around writing reusable
+components!
+
+Further reading (in suggested order):
+
+https://facebook.github.io/react/tutorial/tutorial.html#what-is-react
+https://facebook.github.io/react/docs/rendering-elements.html
+https://facebook.github.io/react/docs/reconciliation.html
+https://medium.com/@dan_abramov/react-components-elements-and-instances-90800811f8ca
+https://facebook.github.io/react/docs/react-api.html#cloneelement
+https://facebook.github.io/react/docs/higher-order-components.html
+https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e
+
+https://www.linkedin.com/pulse/reactive-encapsulation-reusable-components-react-joel-kang/?trackingId=VX2IMv%2FKRvG043NmWmnJCw%3D%3D

@@ -1,0 +1,163 @@
+---
+title: 'In Defence of the Front End'
+publishedAt: '2015-11-20'
+summary: 'In the ever-evolving landscape of software development, the debate between dynamic and static typing continues to be a hot topic.'
+source: https://www.linkedin.com/pulse/defence-front-end-joel-kang
+---
+Fresh out of college and armed with my very practical degree in Cognitive
+Science, I started here at LinkedIn completely convinced that I had found a
+loophole in the interview process. I was pretty sure I screwed up most of my
+interview, and that I must have been hired due to my winsome personality and
+extensive experience in acquiring skill endorsements.
+
+Up to that point, every piece of Javascript I had written pretty much existed in
+single files that were hundreds, if not thousands, of lines long. My most recent
+foray into the backend then required me to modify a Django MVC app even though
+the only server code I had written was in PHP, and I had no idea what MVC meant. 
+
+While working on the Who's Viewed My Profile page that you see today, my
+Confucian upbringing coupled with the talent of our Engineering counterparts
+never failed to remind me that all of these (capital 'E') Engineers could easily
+do my job. Finding a Javascript code review in my inbox heralded my impending
+irrelevance, relegating me to take solace in knowing that no self respecting
+Engineer would spend days pouring over `<table>` tags in order to make an email
+render properly.
+
+As the Web Development team at LinkedIn grew bigger, the types of scaling
+problems that nobody ever talks about started to emerge: one carousel
+implementation was not enough to cover another's use case and bam we had 15
+*extensible* and !reusable! sliders across the site.
+
+During this time of growth, I started to jump on the hotness bandwagon(TM) whose
+lingua franca makes any developer without a Computer Science degree think we
+were speaking Latin. Suddenly we were decorating our widgets instead of
+extending them; but really they should be modules that had mixins on top of
+their prototypes wrapped in an iife so that any leaky abstractions wouldn't
+pollute the global namespace. Before I knew it, I was writing Asynchronous
+Module Declarations for my Model-View-Controller Single-Page Application that
+was bundled with Require and served with Almond.
+
+Wat.
+
+When I started picking up Java/Scala out of necessity, its strongly-typed nature
+lent itself a very gentle learning curve. I didn't necessarily have to
+understand how anything worked (and, to be fair, I didn't), but I could follow
+what everyone else was doing and clone the structure for my own use case. Any
+mistake caused by ignorance, stupidity or lack of caffeine had a red squiggly
+line imploring me to fix it. If there was a better way of structuring a code
+block, IntelliJ would gently nudge me in that direction.
+
+Now, if you've been following closely to the anecdotes I have misled you with,
+this article is really about why Front-End development is actually harder than
+all the other ends (listicle alert).
+
+### 1. Everything is Everything, Everywhere
+In Java projects, any classes or methods that share the same name can be easily
+resolved by importing the packages that specify them; IntelliJ will even suggest
+possible dependencies from which to import. Even then, you can only use that
+specific method assuming your arguments and return type match the function's
+signature. The code and IDE literally prevent you from making syntactic errors.
+
+Javascript globals are everywhere; you're free to set window.MyGlobal to be any
+thing; and because objects are set by reference and not by value, dependency
+injection takes on a whole new meaning when someone else is, erm, injecting into
+your dependency. There are some fundamental syntax rules, but as long as your
+braces are matching, there's nothing stopping you from summing an object with an
+array (see Wat. above).
+
+Since type is basically meaningless in Javascript, you may expect MyGlobal to be
+an object with someMethod, but another library could set window.MyGlobal to be a
+String, resulting in MyGlobal.someMethod being undefined. And recall: 
+
+```js
+null == undefined !== null.
+```
+
+### 2. Everything is Somewhere
+In front-end development, the browser (or native mobile OS) is your Virtual
+Machine, and with the variety of vendors and clients out there, low-level APIs
+are supported at varying degrees of fidelity. That means a lot of:
+
+```js
+if (api.method !== undefined) {
+  api.method();
+} else {
+  /* my own implementation which is probably subpar and slower */
+}
+```
+
+instead of actually, you know, writing business logic.
+
+Just to get Javascript onto the page, the Front-End Developer needs to carefully
+curate her `<script>` tags, making sure that a) script load order is not important
+for execution, and b) that loading doesn't synchronously block the rendering of
+the page, both topics in their own regard.
+
+Lest not we forget that web development also requires both HTML and CSS, each
+with its own compatibility issues across browsers. More importantly, their
+purely declarative natures insist upon a deep understanding of what magic they
+hide under the hood.
+
+### 3. Everything is Nowhere
+Now, all of this actually only happens once some data arrives in the browser
+(typically, the "base page"). This initial request is the first time your
+proprietary data and code leaves your data centres and servers, making contact
+with an ISP that you don't have control over. 
+
+During this transport, any number of things can happen, and any one of your
+scripts may fail. Because Javascript in the browser is single-threaded, any call
+to a method that hasn't been defined will throw an exception that will likely
+bubble to the browser and kill that thread. Suddenly all your JS-enabled
+functionality simply won't work, and your users will be frustrated that your
+button appears clickable but doesn't do anything.
+
+Assuming all of this miraculously succeeds, you must now recall that unlike a
+database, the user's session has little to no state. It doesn't know what
+happened in your server, and its recollection of previous sessions is minimal
+and volatile. Every element has to be re-rendered the same (hopefully
+deterministic) way, and every JSON response representing a data model has to be
+painstakingly reconstructed. Once all of that has completed, you've only started
+your app. Then, between the creativity of your users and the reliability of
+their internet service, one user session is essentially a unique series of code
+execution paths that has never occurred before:
+
+### 4. Everything is Everything
+Ultimately, we can philosophise and debate the theoretical underpinnings of our
+code, but the user sees one interface, and expects to experience that UI as a
+means to some end. Every line of code should exist to help the user navigate
+through this experience as seamlessly, delightfully and easily as possible. 
+
+Animations come top of mind when we talk about user experience, but so is data
+caching for perceptions of speed. Consistency of widgets allows for certain
+affordances and expectations, but so does a customised UI based on some
+complicated mathematical analysis of the user.
+
+Because all of these come together to form one coherent experience, Front-End
+Developers don't simply copy and paste code. We have to rationalise every
+decision, and ultimately consider the performance tradeoffs and ease of reuse
+and refactor as inputs into an algorithm that generates joy and delight. 
+
+### 5. Everything will be Nothing
+Despite all of this, most of the examples I gave above are beginning to fade
+into history as relics of ancient wisdom. Our teams at LinkedIn are moving their
+apps to using NPM for dependency management, productionalising our code using a
+Broccoli pipeline and serving it up as Webpacks. Our recently re-launched mobile
+web experience, Voyager, was written in ES6 on Ember.js and transpiled using
+Babel. 
+
+Front-End Development is a wild and scary rodeo. Because it appears easy, the
+barriers to entry are very low, and a large number of individuals at different
+experience levels contribute to an ever growing shared and shareable codebase.
+Static analyses can only provide so much guidance, and best practices have only
+begun permeating our ecosystem; but go ask your Front-End Dev to compare React,
+Ember and Angular. Our tools are getting better, but they're also turning over
+at an exponential rate. 
+
+It's easy to think web development is easy, and the proverbial nephew developing
+a massive e-commerce website in his basement hasn't yet left the front door. But
+mistake you not--web development is a true profession and requires skill,
+knowledge and experience to be good at. So the next time you develop some web,
+ask yourself if you're considering the appropriate tradeoffs, if you're doing so
+for the user, and if you feel a little anxious inside. If your answers to all
+three are a resounding Yes, then welcome to the trenches as we defend the
+Frontest End.

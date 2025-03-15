@@ -1,0 +1,164 @@
+---
+title: 'Why I'm excited about Glimmer2 and why you already know how it's better'
+publishedAt: '2016-03-31'
+summary: ''
+---
+
+**Update**: Over the weekend this series of tweets went into slightly more
+detail about this (and potentially things to come)
+
+At EmberConf2016, Ember.js core team members Godfrey Chan and Yehuda Katz
+unveiled some aspects of the new Glimmer2 engine that will power Ember template
+rendering:
+
+The talk itself contained some amount of magical hand waving (or what we
+technically refer to in the industry as "abstractions"), but it fundamentally
+introduced to us the design decisions that would allow Glimmer to (allegedly)
+achieve 60fps rendering.
+
+Template Optimisations Part of the magic lies in the second half of the speaker
+deck, which describes how:
+
+templates are pre-compiled at build-time to a much leaner wire format for
+smaller asset bundles. The wire format is then lazily parsed and evaluated
+during run-time (JIT-compiled) into a highly optimised opcode. The opcode is
+then rendered in a custom VM into memoized operations that output regular DOM
+nodes. Essentially, Godfrey and Yehuda have highly optimised every single step
+in the conversion of some `{{mustache}}` into their corresponding DOM nodes. This
+is all very cool since there's nothing that app developers need to actually do
+to gain the benefits from all of these optimisations. It should, according to
+them, Just Work (tm).
+
+The problem they thus set out to solve is to bridge the gap between the
+functionally-reactive template concept, and the functional but non-reactive
+Javascript data ecosystem. Data Down? More interestingly, they started by
+confusing us laying out the conceptual framework that templates are essentially
+pure functions for transforming some input data into some output HTML. The
+problem, however, is that Javascript has never been truly functional the way
+that the Lisp languages have been.
+
+Being able to create vars in order to store intermediate outputs of a function
+allows us to procedurally decide how to chain / stream functions together, when
+to pause these streams (by storing the intermediate outputs into variables) and
+then, at some point in the future, resume said streams. These intermediate
+states, however, can meanwhile be modified by other (occasionally external)
+functions that often result in the spooky action at a distance class of bugs.
+Every time you modify data using the this pointer, you're leaving the realm of
+the purely functional.
+
+The problem they thus set out to solve is to bridge the gap between the
+functionally-reactive template concept, and the functional but non-reactive
+Javascript data ecosystem.
+
+Abstract References To do this, they introduce the concept of the Reference,
+which is essentially an object that wraps a primitive value with a getter;
+instead of accessing a piece of data directly, Glimmer2 accesses references to
+such data. This sounds more complicated than it really is; in fact, if you're a
+javascript developer, you already know how what references are: we just call
+them "variables".
+
+When you write var foo = bar + bat, you're creating an expression that sums the
+values of the references (variables) "bar" and "bat" In order to know what to
+store into foo, we have to know the values of bar and bat at the time this
+expression is evaluated.
+
+What Glimmer2 does is take this abstraction one level higher: instead of
+consuming javascript primitives as data, the template operations only deal with
+References, deferring the evaluation of their values till later: fooReference =
+barReference + batReference.
+
+ ... if you're a javascript developer, you already know how what references are:
+we just call them "variables" Lazy Evaluation Because we're just passing around
+these references, we don't actually need to calculate their values until
+absolutely necessary. If these calculations are very computation heavy, then
+we're delaying those computations until the point right before that portion of
+the template will be rendered: barReference and batReference only need to be
+evaluated if fooReference is evaluated. If the template accesses either
+barReference or batReference in a conditional, then only one of those two
+references will actually be evaluated.
+
+Pulling values instead of Pushing them A key factor in this design, is that it
+allows us to convert the entire data-down part of DDAU to use a pull system
+rather than a push one.
+
+You're already familiar with the push model because that's how the DOM Event
+model works: when you want to handle a click event, you subscribe to it using
+addEventListener so that when a user clicks your button, the Event object gets
+pushed into your handler, and then pushed up the DOM tree (propagated) until the
+root element.
+
+You're also familiar with this because that's how Computed Properties work
+today: when you defined foo to be a computed property of bar and bat, you're
+essentially saying "on bar change, also change foo" and "on bat change, also
+change foo". 
+
+With reference compositions, Glimmer2 actually inverts this logic: "on get foo,
+also get the the values of bar and bat (but only if necessary)".
+
+Validations and Dirty Checking Now, you may be thinking: wait, what if only bar
+changes but not bat? That's where the brilliance of Validators comes in.
+Essentially, validators augment references with a validation method that allows
+the engine to either return a previously calculated value if it is not dirty, or
+redo the calculation again. And recall, all of this is moot if fooReference no
+longer needs to be computed.
+
+How they do this is basically by maintaining a local and global lastModified
+stamp, and comparing the stamps during validation to determine if they are the
+same. If they are, the value obtained is not dirty and we can short-circuit the
+calculation. There's a little bit of magical hand-waving going on here too, but
+it's not that important that we know the internals of how validation is done.
+
+What is important, however, is that because Glimmer2 defines such a validation
+interface and consistently applies it across all references, the benefit of not
+needing to evaluate more computationally complex references quickly outweighs
+the performance overhead of doing the validation.
+
+With reference compositions, Glimmer2 actually inverts this logic: "on get foo,
+also get the the values of bar and bat (but only if necessary)" So What? The
+ecosystem of Javascript today is filled with push-based event-driven models.
+I've always found this to be massively disconcerting because when any subscriber
+can subscribe to any publisher, the state of the world is highly dependent on
+what publishers do. Yet ironically, publishers have no idea what happens to the
+rest of the system when they do publish an event.
+
+Supporters of pub/sub systems highlight the decoupling of subscribers and
+publishers as a key benefit; but I argue that these systems are not removing the
+concerns of dependency, they're just moving it into the untraceable, ethereal
+space of the pub/sub channel. And when subscribers also become publishers, we
+quickly devolve into the circular hell we know today as two-way data binding.
+
+This pull based system that Godfrey and Yehuda are building makes a lot more
+sense since there's always a clear unidirectional data flow that stems not from
+the origin of a push request (which can come from anywhere), but from the
+outcome of a pull request (which is always known since the thing making the
+request is the outcome). If you work with broccoli, that's essentially how
+broccoli walks through your trees: it starts at the end and walks backwards so
+it know where to stop when dependent values haven't changed.
+
+Glimmer2 is exciting not because it makes our view layer insanely faster. It's
+exciting because it fundamentally changes the way we think about how data flows
+through our templates, and does so using the deceptively simple concept of the
+validated reference. 
+
+Endless possibilities At the start of this article, I highlighted the second
+half of their presentation first, in part because it seemed easier to
+understand, especially when sold as just a bunch of optimisations. It's no
+mistake, however, the order in which Godfrey and Yehuda laid out their
+presentation.
+
+Taking both halves in concert, we can start to understand how this deceptively
+simple system is immensely powerful. By converting handlebars templates into
+minutely efficient and ordered operations for DOM creation that depend on an
+output-driven pull-based data flow, Glimmer2 is able to determine which part of
+the rendered HTML maps to which opcode and thusly which (part of which)
+template.
+
+What they've essentially done, then, is to create a dynamic system for reverse
+engineering: given a particular DOM structure (output), and a input dataset, the
+engine can recreate the state of each component and template in your app.
+Fastboot and Glimmer2 then work in concert to render our app server side,
+transmit it over the wire, and recreate the app state from the rendered HTML,
+paving the way for us to achieve true universality in our Javascript
+applications.
+
+https://www.linkedin.com/pulse/why-im-excited-glimmer2-you-already-know-its-better-joel-kang/?trackingId=VX2IMv%2FKRvG043NmWmnJCw%3D%3D
