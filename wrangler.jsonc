@@ -16,4 +16,10 @@
       "id": "aa0ec1096acf4e04a6ce5e1a37b3d239"
     }
   ],
+  "routes": [
+    {
+      "pattern": "joelkang.com",
+      "custom_domain": true
+    }
+  ]
 }

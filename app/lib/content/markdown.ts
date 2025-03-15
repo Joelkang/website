@@ -6,7 +6,6 @@ import { evaluate } from "@mdx-js/mdx";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import type { FC } from "react";
-import remarkGfm from "remark-gfm";
 import type { PostMetadata } from ".";
 const POSTS_DIR = "app/lib/content";
 
@@ -33,7 +32,7 @@ async function extractMdFrontmatter(rawContent: string) {
     Fragment: "none",
     jsx: () => "",
     jsxs: () => "",
-    remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter],
+    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
   });
   return frontmatter as PostMetadata;
 }

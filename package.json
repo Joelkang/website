@@ -4,10 +4,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "clean": "rm -Rf .next .open-next",
     "worker:build": "opennextjs-cloudflare",
     "worker:dev": "wrangler dev --port 8771",
     "worker:preview": "npm run worker:build && npm run dev:worker",
-    "worker:deploy": "npm run worker:build && wrangler deploy",
+    "worker:deploy": "npm run worker:build && wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
@@ -20,24 +21,24 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sugar-high": "^0.9.3",
-    "tailwind-merge": "^3.0.2",
-    "typescript": "5.8.2"
+    "tailwind-merge": "^3.0.2"
   },
   "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6",
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250313.0",
     "@biomejs/biome": "^1.9.4",
+    "@cloudflare/workers-types": "^4.20250313.0",
+    "@mdx-js/loader": "^3.1.0",
     "@opennextjs/cloudflare": "^0.5.11",
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
     "@types/node": "20.11.17",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "remark-frontmatter": "^5.0.0",
-    "remark-gfm": "^4.0.1",
-    "remark-mdx-frontmatter": "^5.0.0",
     "postcss": "^8.5.3",
+    "remark-frontmatter": "^5.0.0",
+    "remark-mdx-frontmatter": "^5.0.0",
     "tailwindcss": "4.0.14",
+    "typescript": "5.8.2",
     "wrangler": "^4.0.0"
   }
 }

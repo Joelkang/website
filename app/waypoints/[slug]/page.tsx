@@ -39,7 +39,7 @@ export async function generateMetadata(props: PageProps) {
       description,
       type: "article",
       publishedTime,
-      url: `${baseUrl}/blog/${slug}`,
+      url: `${baseUrl}/${slug}`,
       images: [
         {
           url: ogImage,
