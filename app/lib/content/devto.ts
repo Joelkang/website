@@ -51,7 +51,7 @@ async function getDevToPosts() {
       headers: {
         accept: "application/vnd.forem.api-v1+json",
         "content-type": "application/json",
-        "api-key": "jgMKJBnHr1HWNykLaor8PZnD",
+        "api-key": `${process.env.DEV_TO_API_KEY}`,
       },
     },
   );
