@@ -24,6 +24,10 @@
     {
       "pattern": "joelkang.com",
       "custom_domain": true
+    },
+    {
+      "pattern": "www.joelkang.com",
+      "custom_domain": true
     }
   ]
 }
