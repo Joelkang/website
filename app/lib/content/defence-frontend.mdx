@@ -1,8 +1,8 @@
 ---
-title: 'In Defence of the Front End'
+title: In Defence of the Front End
 publishedAt: '2015-11-20'
-summary: "Follow a self-doubting front-end developer‘s journey from imposter syndrome to coding confidence. Through tales of JavaScript chaos, buzzword bingo, and the comforting embrace of Java‘s red squiggly lines, this candid confession explores the unique challenges and surprising strengths of front-end development in a world that often undervalues it."
-original: 'https://www.linkedin.com/pulse/defence-front-end-joel-kang'
+summary: Front-end may be accessible, but does it necessarily make it simple?
+original: https://www.linkedin.com/pulse/defence-front-end-joel-kang
 ---
 Fresh out of college and armed with my very practical degree in Cognitive
 Science, I started here at LinkedIn completely convinced that I had found a
@@ -51,7 +51,7 @@ Now, if you've been following closely to the anecdotes I have misled you with,
 this article is really about why Front-End development is actually harder than
 all the other ends (listicle alert).
 
-### 1. Everything is Everything, Everywhere
+## 1. Everything is Everything, Everywhere
 In Java projects, any classes or methods that share the same name can be easily
 resolved by importing the packages that specify them; IntelliJ will even suggest
 possible dependencies from which to import. Even then, you can only use that
@@ -73,7 +73,7 @@ String, resulting in MyGlobal.someMethod being undefined. And recall:
 null == undefined !== null.
 ```
 
-### 2. Everything is Somewhere
+## 2. Everything is Somewhere
 In front-end development, the browser (or native mobile OS) is your Virtual
 Machine, and with the variety of vendors and clients out there, low-level APIs
 are supported at varying degrees of fidelity. That means a lot of:
@@ -98,7 +98,7 @@ with its own compatibility issues across browsers. More importantly, their
 purely declarative natures insist upon a deep understanding of what magic they
 hide under the hood.
 
-### 3. Everything is Nowhere
+## 3. Everything is Nowhere
 Now, all of this actually only happens once some data arrives in the browser
 (typically, the "base page"). This initial request is the first time your
 proprietary data and code leaves your data centres and servers, making contact
@@ -121,7 +121,7 @@ your app. Then, between the creativity of your users and the reliability of
 their internet service, one user session is essentially a unique series of code
 execution paths that has never occurred before:
 
-### 4. Everything is Everything
+## 4. Everything is Everything
 Ultimately, we can philosophise and debate the theoretical underpinnings of our
 code, but the user sees one interface, and expects to experience that UI as a
 means to some end. Every line of code should exist to help the user navigate
@@ -137,7 +137,7 @@ Developers don't simply copy and paste code. We have to rationalise every
 decision, and ultimately consider the performance tradeoffs and ease of reuse
 and refactor as inputs into an algorithm that generates joy and delight. 
 
-### 5. Everything will be Nothing
+## 5. Everything will be Nothing
 Despite all of this, most of the examples I gave above are beginning to fade
 into history as relics of ancient wisdom. Our teams at LinkedIn are moving their
 apps to using NPM for dependency management, productionalising our code using a

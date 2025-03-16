@@ -7,7 +7,8 @@
 }
 
 @theme {
-  --color-brand: #f47067;
+  --color-brand: #9bfd5e;
+  --color-maihem: #f47067;
 }
 
 :root {
@@ -38,9 +39,6 @@ html {
   min-width: 360px;
 }
 
-.anchor:hover {
-  @apply visible;
-}
 
 pre::-webkit-scrollbar {
   display: none;
@@ -72,10 +70,20 @@ table {
 
 @layer utilities {
   .prose {
-    --tw-prose-bold: currentColor;
-
     a {
-      @apply underline dark:text-brand transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+      @apply transition-all text-brand decoration-brand/50 underline-offset-3 decoration-[0.1em];
+
+      &:hover {
+        @apply decoration-brand/80 underline-offset-2;
+      }
+
+      &[href*="maihem"] {
+        @apply text-maihem decoration-maihem/50;
+
+        &:hover {
+          @apply decoration-maihem/80;
+        }
+      }
     }
 
     .anchor {
@@ -87,18 +95,25 @@ table {
       max-width: 700px;
       cursor: pointer;
 
-      &:after {
+      &::before {
         @apply text-neutral-300 dark:text-neutral-700;
         content: "#";
       }
-    }
 
-    *:hover > .anchor {
-      @apply visible;
+      .prose *:hover & {
+        @apply visible;
+      }
     }
 
     pre {
       @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+    }
+
+    :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+      &::before,
+      &::after {
+        content: none;
+      }
     }
 
     code {
@@ -111,7 +126,7 @@ table {
       line-height: 1.5;
     }
 
-    code span {
+    code .sh__line {
       @apply font-medium;
     }
 

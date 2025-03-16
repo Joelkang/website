@@ -62,8 +62,14 @@ function RoundedImage(props: ImageProps) {
 
 function Code({ children, ...props }) {
   const codeHTML = highlight(children);
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: wrapped in a code
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+  return (
+    <code
+      className="bg-neutral-900"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: wrapped in a code
+      dangerouslySetInnerHTML={{ __html: codeHTML }}
+      {...props}
+    />
+  );
 }
 
 function slugify(str: string) {
@@ -94,9 +100,8 @@ function createHeading(level: number) {
           "text-lg": level === 6,
         })}
       >
-        <a href={`#${slug}`} className="anchor">
-          {children}
-        </a>
+        <a href={`#${slug}`} className="anchor" />
+        {children}
       </Component>
     );
   };

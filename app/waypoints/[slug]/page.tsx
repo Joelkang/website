@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { listPostsMeta, importMdxPost } from "@/lib/content";
 import { baseUrl } from "app/sitemap";
 import { formatDate } from "@/lib/utils/dates";
+import { ExternalLink } from "lucide-react";
 
 export async function generateStaticParams() {
   const posts = await listPostsMeta();
@@ -73,14 +74,20 @@ export default async function Posts(props: PageProps) {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(metadata.publishedAt)}
         </p>
-        {metadata.original && (
-          <p>
-            This post was originally published{" "}
-            <a href={metadata.original}>here</a>.
-          </p>
-        )}
       </div>
-      <article className="prose">
+
+      {metadata.original && (
+        <aside className="text-sm text-white/30">
+          This post was originally published on{" "}
+          <a
+            href={metadata.original}
+            className="inline-flex gap-1 items-baseline hover:text-white hover:underline"
+          >
+            LinkedIn <ExternalLink size={12} />
+          </a>
+        </aside>
+      )}
+      <article className="prose prose-invert">
         <Post />
       </article>
     </section>

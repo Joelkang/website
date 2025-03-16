@@ -1,51 +1,142 @@
 ---
-title: 'Numbers! Numbers Everywhere!'
-publishedAt: '2014-07-13'
-summary: 'Are your A/B tests lying to you? Dive into the hidden pitfalls of treating users as statistical monoliths rather than complex individuals. This provocative exploration challenges conventional wisdom about web experiments and reveals why your conversion metrics might be hiding crucial insights about how real humans navigate your digital experiences.'
+title: Numbers! Numbers Everywhere!
+publishedAt: 2014-07-13
+summary: Are your A/B tests lying to you? Dive into the hidden pitfalls of treating users as statistical monoliths rather than complex individuals. This provocative exploration challenges conventional wisdom about web experiments and reveals why your conversion metrics might be hiding crucial insights about how real humans navigate your digital experiences.
+original: https://www.linkedin.com/pulse/20140703183336-23794322-numbers-numbers-everywhere
 ---
 
-| Look at our numbers, everyone loves us - Not an actual quote by a Product Manager.
+> Look at our numbers, everyone loves us - Not an actual quote by a Product
+> Manager.
 
-Two weeks ago, I had a very lively debate with my PM, Udi Milo, about how we determine the efficacy of the A/B tests we run here at LinkedIn.
+Two weeks ago, I had a very lively debate with my PM, Udi Milo, about how we
+determine the efficacy of the A/B tests we run here at LinkedIn.
 
-Udi had shown us the results of one of our tests, to which I raised an eyebrow and wondered out loud how sure we were that those results were due to a test that we ran and not some other test running on the site.
+Udi had shown us the results of one of our tests, to which I raised an eyebrow
+and wondered out loud how sure we were that those results were due to a test
+that we ran and not some other test running on the site.
 
-Randomise all of the things
-Udi's explained that statistically, it doesn't really matter what other tests are run on the site since all users are apportioned (approximately) equally into a treatment bucket encompassing one of the possible variants in every experiment. Other places have explained in detail the mathematics behind why running multiple experiments doesn't really affect the analysis of any one experiment's results since we can group together only those buckets that are different in the variants of the experiment that we care about.
+## Randomise all of the things 
+Udi's explained that statistically, it doesn't
+really matter what other tests are run on the site since all users are
+apportioned (approximately) equally into a treatment bucket encompassing one of
+the possible variants in every experiment. Other places have explained in detail
+the mathematics behind why running multiple experiments doesn't really affect
+the analysis of any one experiment's results since we can group together only
+those buckets that are different in the variants of the experiment that we care
+about.
 
-While I agreed with the statistics of randomisation, the basis of my argument was that A/B tests tend to incorrectly think of users as monolithic; from the view of assigning users into test buckets, a user is a user is a user, regardless of their demographic, attitudinal or behavioural characteristics. By not applying segmentation strategies in our A/B tests, we introduce a whole variety of representational biases that then we're unable to drill down into because we have randomly allocated these characteristics away.
+While I agreed with the statistics of randomisation, the basis of my argument
+was that A/B tests tend to incorrectly think of users as monolithic; from the
+view of assigning users into test buckets, a user is a user is a user,
+regardless of their demographic, attitudinal or behavioural characteristics. By
+not applying segmentation strategies in our A/B tests, we introduce a whole
+variety of representational biases that then we're unable to drill down into
+because we have randomly allocated these characteristics away.
 
-Obviously it is not possible to test all possible segments of user demographics, nor is it particularly useful to do so. Doing segmentation is also difficult because it needs to be done prior to testing (theoretically, we can do segmentation analyses on the results, but that's post hoc and alludes to, but does not correlate, segment characteristics with resultant behaviour), which means certain assumptions about what those segments are.
+Obviously it is not possible to test all possible segments of user demographics,
+nor is it particularly useful to do so. Doing segmentation is also difficult
+because it needs to be done prior to testing (theoretically, we can do
+segmentation analyses on the results, but that's post hoc and alludes to, but
+does not correlate, segment characteristics with resultant behaviour), which
+means certain assumptions about what those segments are.
 
-There have been studies across obvious demographic fields including age, gender, and culture, and hypotheses about a website's user base help to inform what segments to test against. One key group of users that tends to get forgotten are those using Accessible Technologies -- given that these users experience websites very differently when compared to their counterparts who do so via standard browsers, they represent an important segment that traditional A/B testing randomises away.
+There have been studies across obvious demographic fields including age, gender,
+and culture, and hypotheses about a website's user base help to inform what
+segments to test against. One key group of users that tends to get forgotten are
+those using Accessible Technologies -- given that these users experience
+websites very differently when compared to their counterparts who do so via
+standard browsers, they represent an important segment that traditional A/B
+testing randomises away.
 
-I don't always test, but when I test, I test one web page at a time only.
-Breaking down the assumption that all our users are the same got me thinking about whether the actual tests suffer from the same assumptions. The argument put forth in the Optimizely blog post above suggested that as long as we bucket users equally across experiments, the effects of any one test will apply proportionally to all the buckets since they're apportioned (effectively) equally.
+## I don't always test, but when I test, I test one web page at a time only.
+Breaking down the assumption that all our users are the same got me thinking
+about whether the actual tests suffer from the same assumptions. The argument
+put forth in the Optimizely blog post above suggested that as long as we bucket
+users equally across experiments, the effects of any one test will apply
+proportionally to all the buckets since they're apportioned (effectively)
+equally.
 
-If A/B tests test two (or more) variants of a single element or module on a page: a button, some text, or the placement of either in said page; and multivariate testing does the same for multiple elements including the interaction between these elements, we might consider running experiments across different pages on a website to be one massive single multivariate experiment.
+If A/B tests test two (or more) variants of a single element or module on a
+page: a button, some text, or the placement of either in said page; and
+multivariate testing does the same for multiple elements including the
+interaction between these elements, we might consider running experiments across
+different pages on a website to be one massive single multivariate experiment.
 
-The key difference between considering multiple tests as multiple A/B experiments versus a single multivariate experiment with very many variants is the assumption of independence between these experiments. Let's take a look at whether this assumption holds:
+The key difference between considering multiple tests as multiple A/B
+experiments versus a single multivariate experiment with very many variants is
+the assumption of independence between these experiments. Let's take a look at
+whether this assumption holds:
 
-Most of the time, the metric that we care about (or the conversion rate) isn't actually measured on the page the test is run. You see a green button and flashy text and you think, "okay, seems legitimate; take my money." But little do you know, the Conversions team is doing an A/B test on the Shopping Cart page to change how the sign up form is laid out.
+Most of the time, the metric that we care about (or the conversion rate) isn't
+actually measured on the page the test is run. You see a green button and flashy
+text and you think, "okay, seems legitimate; take my money." But little do you
+know, the Conversions team is doing an A/B test on the Shopping Cart page to
+change how the sign up form is laid out.
 
-Traditional A/B testing will argue that a user may view a green or blue button, and may see either form layout 1 or 2, resulting in 4 possible combinations. However, we can't safely assume that the experiments (and thus their variants) are independent of each other--that each of the 4 combinations should be equally allocated a bucket of users. The key reason to this is that webpages on a site are not independent of each other in part because there are a few ways to get to any single page:
+Traditional A/B testing will argue that a user may view a green or blue button,
+and may see either form layout 1 or 2, resulting in 4 possible combinations.
+However, we can't safely assume that the experiments (and thus their variants)
+are independent of each other--that each of the 4 combinations should be equally
+allocated a bucket of users. The key reason to this is that webpages on a site
+are not independent of each other in part because there are a few ways to get to
+any single page:
 
-a hyperlink from another page on the site
-the url being passed around from outside of the site's ecosystem (search engines, social media, carrier pigeon, etc.)
-the url has been bookmarked from a previous visit
-Assuming that the first way is the way most people access a web page, access to page is dependent on the series of links leading up to the page on which the test is run. To assume that the tests are independent is to assume they share the same population. Sure, you may be testing the same user base who has registered for your site, but the people who are actually accessing the sign up page on which the form layout test is being run may not be a stable, normally distributed population.
+a hyperlink from another page on the site the url being passed around from
+outside of the site's ecosystem (search engines, social media, carrier pigeon,
+etc.) the url has been bookmarked from a previous visit Assuming that the first
+way is the way most people access a web page, access to page is dependent on the
+series of links leading up to the page on which the test is run. To assume that
+the tests are independent is to assume they share the same population. Sure, you
+may be testing the same user base who has registered for your site, but the
+people who are actually accessing the sign up page on which the form layout test
+is being run may not be a stable, normally distributed population.
 
-This is in part due to any tests being run upstream. If a user is unable to detect the green button on a preceeding page because it has too little contrast, then the users entering the sign up page are a specific subset of the userbase. Users who experience one of the two form layout variants are those who have a higher level of contrast discrimination than those who never did because they never saw the green button. There's something systemically different about this bucket of users, and this difference makes them no longer representative of the population of users on your site insofar that the proportionate, random bucketing of users is no longer valid.
+This is in part due to any tests being run upstream. If a user is unable to
+detect the green button on a preceeding page because it has too little contrast,
+then the users entering the sign up page are a specific subset of the userbase.
+Users who experience one of the two form layout variants are those who have a
+higher level of contrast discrimination than those who never did because they
+never saw the green button. There's something systemically different about this
+bucket of users, and this difference makes them no longer representative of the
+population of users on your site insofar that the proportionate, random
+bucketing of users is no longer valid.
 
-This is further complicated by the users who experience one of the two form layout variants by directly accessing the sign up page, either from a search engine or through having the url being shared with them (oh we can dream). In fact, point 3 might also introduce bias: is there a type of web surfer that is more inclined to bookmark your page than any other kind? Is that type of user someone whom you want to target?
+This is further complicated by the users who experience one of the two form
+layout variants by directly accessing the sign up page, either from a search
+engine or through having the url being shared with them (oh we can dream). In
+fact, point 3 might also introduce bias: is there a type of web surfer that is
+more inclined to bookmark your page than any other kind? Is that type of user
+someone whom you want to target?
 
-This is not to say all the experiments are dependent on each other. To determine which tests are or are not dependent, we can apply Analyses of Variance (ANOVA) regressions on the conversion metric against each test variable in all the experiments in order to determine the actual effectiveness of a particular variable on the test metric. This quickly becomes overly complicated and computationally expensive with increasing number of experiments as tends to be with important conversion metrics.
+This is not to say all the experiments are dependent on each other. To determine
+which tests are or are not dependent, we can apply Analyses of Variance (ANOVA)
+regressions on the conversion metric against each test variable in all the
+experiments in order to determine the actual effectiveness of a particular
+variable on the test metric. This quickly becomes overly complicated and
+computationally expensive with increasing number of experiments as tends to be
+with important conversion metrics.
 
-Much research; very user; data.
-Since doing these regressions against multiple variants in thousands of tests is neither feasible nor cost effective, we can at least obtain some data through user research. Usability testing, even with a small sample of users, reveals the pathways by which a user reaches a conversion page. By focusing on how a real user actually navigates a website in a particular treatment bucket, we are able to contextualise the experimental data we obtain.
+## Much research; very user; data. 
+Since doing these regressions against multiple
+variants in thousands of tests is neither feasible nor cost effective, we can at
+least obtain some data through user research. Usability testing, even with a
+small sample of users, reveals the pathways by which a user reaches a conversion
+page. By focusing on how a real user actually navigates a website in a
+particular treatment bucket, we are able to contextualise the experimental data
+we obtain.
 
-User research can never obtain the statistical significance of run-time data collection and behaviour tracking, but it allows researchers to quickly gather data that could suggest if further segment testing is required, or if certain experiments need to be regressed against variables from other experiments.
+User research can never obtain the statistical significance of run-time data
+collection and behaviour tracking, but it allows researchers to quickly gather
+data that could suggest if further segment testing is required, or if certain
+experiments need to be regressed against variables from other experiments.
 
-Data is very powerful, but can also be very misleading if read through the wrong lens. Cognitive Science provides us with countless examples of how the human mind is so easily tricked, and how misinformation can be seeded and grown very quickly in the mind. Because usability research emphasises certain principles to reduce the observer effect, it attempts to mimic a highly specific and budget-friendly (albeit manual) type of segment testing.
+Data is very powerful, but can also be very misleading if read through the wrong
+lens. Cognitive Science provides us with countless examples of how the human
+mind is so easily tricked, and how misinformation can be seeded and grown very
+quickly in the mind. Because usability research emphasises certain principles to
+reduce the observer effect, it attempts to mimic a highly specific and
+budget-friendly (albeit manual) type of segment testing.
 
-I'm not statistician, but as a huge advocate of user research, it is my hope that usability testing will gain an importance equal to that of data science in helping us understand how people interact with websites.
+I'm not statistician, but as a huge advocate of user research, it is my hope
+that usability testing will gain an importance equal to that of data science in
+helping us understand how people interact with websites.

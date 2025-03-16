@@ -1,8 +1,8 @@
 ---
 title: 'Reactive Encapsulation: Reusable Components in React'
-publishedAt: '2017-08-27'
-summary: "Unlock the secret to writing truly reusable React components that balance consistency with flexibility. This practical exploration cuts through the theoretical noise to reveal how React's JSX brilliantly bridges the HTML-JavaScript divide, and provides actionable strategies for component composition that will transform how you approach frontend architecture."
-original: 'https://www.linkedin.com/pulse/reactive-encapsulation-reusable-components-react-joel-kang/'
+publishedAt: 2017-08-27
+summary: Unlock the secret to writing truly reusable React components that balance consistency with flexibility. This practical exploration cuts through the theoretical noise to reveal how React's JSX brilliantly bridges the HTML-JavaScript divide, and provides actionable strategies for component composition that will transform how you approach frontend architecture.
+original: https://www.linkedin.com/pulse/reactive-encapsulation-reusable-components-react-joel-kang/
 ---
 
 I've been using React for about a year now, and even though its approach of
@@ -49,25 +49,25 @@ components that are intentionally generic and should be reusable across multiple
 apps, all with varying use cases and business needs? It always seems to boil
 down to one of two things:
 
-Config soup: Every use case adds a config specific for its use case with a
-backwards-compatible default. Soon, you have 14 configuration options for a
+1. **Config soup:** Every use case adds a config specific for its use case with
+a backwards-compatible default. Soon, you have 14 configuration options for a
 single component, some of which only apply if you have that one boolean set to
-true, or if another config is not set. Copy pasta: My use case is different
-enough from your use case that it justifies me copying and pasting your
-implementation and changing it to fit my needs. If there are code-external
-demands for consistency across both components (usually around design and
-accessibility), somebody (who?) will have to know to update both places (how?).
-Soon, you'll have 5 modals and 7 carousels. The modus operandi of web
-components, is that we should stop trying to extend things with features, but
-compose them from smaller, isolated parts. This is not something that relative
-newcomers to React are exposed to, but it does in fact allow us to do that in a
-number of ways. Let's walk though some of these strategies to make our
-components more reusable.
+true, or if another config is not set. 
+1. **Copy pasta:** My use case is different enough from your use case that it
+justifies me copying and pasting your implementation and changing it to fit my
+needs. If there are code-external demands for consistency across both components
+(usually around design and accessibility), somebody (who?) will have to know to
+update both places (how?). Soon, you'll have 5 modals and 7 carousels. The modus
+operandi of web components, is that we should stop trying to extend things with
+features, but compose them from smaller, isolated parts. This is not something
+that relative newcomers to React are exposed to, but it does in fact allow us to
+do that in a number of ways. Let's walk though some of these strategies to make
+our components more reusable.
 
-Strategy 1: Inversion of Control While it's always easier to see everything come
-together as a whole before breaking it up into smaller component parts, changing
-the way you think about component design can help make your components flexible
-out of the box.
+## Strategy 1: Inversion of Control
+While it's always easier to see everything come together as a whole before
+breaking it up into smaller component parts, changing the way you think about
+component design can help make your components flexible out of the box.
 
 Instead of having a single component render any number of subcomponents, we can
 think of subcomponents as dependencies to be injected into the subject
@@ -132,19 +132,20 @@ order to be able to perform that purpose? What can it leave up to consuming
 components and what does it want to enforce? Could we, for example, even pass in
 `<NewModalFooter />` into `<MyModal />`?
 
-Strategy 2: Hax0rzing the virtual DOM tree with React.cloneElement() But first,
-terminology. We know that React works by maintaining virtual DOMs in memory,
-diffing them against each other in order to figure out what needs re-rendering
-in the browser's DOM. But how do the React components we write actually become
+## Strategy 2: Hax0rzing the virtual DOM tree with React.cloneElement()
+### But first, terminology. 
+We know that React works by maintaining virtual DOMs in memory, diffing them
+against each other in order to figure out what needs re-rendering in the
+browser's DOM. But how do the React components we write actually become
 instantiated into DOM nodes?
 
-Components: What we usually refer to as Components are actually component
+1. **Components:** What we usually refer to as Components are actually component
 definitions (as opposed to component instances). When you do
 `React.createClass()` or write a pure functional component in JSX, what you're
 writing is a declaration for what a Component should do and look like (hence you
 are creating a class). To render a component, you'd write `<MyComponent />`
-Elements: The JSX compiler than transforms any of these Components (even the
-native browser "components" such as `<div>`s and `<a>`s and `<span>`s) into
+1. **Elements:** The JSX compiler than transforms any of these Components (even
+the native browser "components" such as `<div>`s and `<a>`s and `<span>`s) into
 React Elements by transpiling `<MyComponent />` into a
 `React.createElement(MyComponent)` method call. React Elements are
 specifications for how to render a specific node in the virtual DOM tree.
@@ -152,8 +153,9 @@ Elements have a type field, which is either a string representing the native DOM
 element 'div', 'a', 'span', or the actual Component class returned from a
 `React.createClass()` call. Together with a props map, an Element serves as a
 specification for how a specific instance of a component will be rendered in a
-specific place in the tree. To render an Element, you write ` { myElement }` At
-no point do we actually instantiate any React Elements ourselves. All we are
+specific place in the tree. To render an Element, you write ` { myElement }` 
+
+At no point do we actually instantiate any React Elements ourselves. All we are
 writing in our JSX files are specifications for what the DOM tree will actually
 look like. We pass this specification to React, who will then internally
 instantiate actual Javascript objects representing a node in the virtual DOM
@@ -161,7 +163,8 @@ tree. When state changes and React re-renders, the same specification is used
 (albeit with different prop values) to create a new virtual DOM for diffing
 against the previous one.
 
-Enter React.cloneElement() What this means is that we can intercept the vDOM
+### Enter React.cloneElement()
+What this means is that we can intercept the vDOM
 tree prior to it being passed to React by changing the tree's specification.
 Despite its name, `React.cloneElement()` doesn't have the performance baggage of
 a lot of other types of cloning since you're merely cloning the specification
@@ -205,14 +208,15 @@ But it serves as a good example of how we might use `defaultProps` and
 `cloneElement` to minimise the surface area of our component, and keep it
 customisable for those who need it to be.
 
-Strategy 3: Higher Order Components The last strategy for sharing common
-behaviour is by dynamically extending a Component class's functionality at run
-time with a Higher Order Component (HOC). There's nothing specifically React
-about HOCs since all they are are Component factories: an HOC is a function that
-takes in a Component class as a parameter, and returns a new Component class
-that does something over and above the wrapped Component. It's particularly
-useful for augmenting Components with lifecycle-related functionality, or
-precomposing sets of props for passing into the wrapped Component.
+## Strategy 3: Higher Order Components 
+The last strategy for sharing common behaviour is by dynamically extending a
+Component class's functionality at run time with a Higher Order Component (HOC).
+There's nothing specifically React about HOCs since all they are are Component
+factories: an HOC is a function that takes in a Component class as a parameter,
+and returns a new Component class that does something over and above the wrapped
+Component. It's particularly useful for augmenting Components with
+lifecycle-related functionality, or precomposing sets of props for passing into
+the wrapped Component.
 
 In this example, I create an HOC that wraps a Component with a `<div>` to
 provide closing animations. Typically when you use the `{ isShowing &&
@@ -257,7 +261,7 @@ function App(props) {
 ```
 You'll notice, in particular, that I'm clobbering the `onClose` prop that
 `<SomeModalClass>` originally expects, with `startAnimatingClose`. To the
-internal implementation of `<SomeModalClass` it's completely transparent whether
+internal implementation of `<SomeModalClass>` it's completely transparent whether
 or not the class was wrapped in an HOC or not.
 
 It's important to recognise the differences between using `cloneElement()` and
@@ -283,10 +287,10 @@ components. Leave a comment if you have thoughts around writing reusable
 components!
 
 Further reading (in suggested order):
-1. https://facebook.github.io/react/tutorial/tutorial.html#what-is-react
-1. https://facebook.github.io/react/docs/rendering-elements.html
-1. https://facebook.github.io/react/docs/reconciliation.html
-1. https://medium.com/@dan_abramov/react-components-elements-and-instances-90800811f8ca
-1. https://facebook.github.io/react/docs/react-api.html#cloneelement
-1. https://facebook.github.io/react/docs/higher-order-components.html
-1. https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e
+1. [https://facebook.github.io/react/tutorial/tutorial.html#what-is-react]()
+1. [https://facebook.github.io/react/docs/rendering-elements.html]()
+1. [https://facebook.github.io/react/docs/reconciliation.html]()
+1. [https://medium.com/@dan_abramov/react-components-elements-and-instances-90800811f8ca]()
+1. [https://facebook.github.io/react/docs/react-api.html#cloneelement]()
+1. [https://facebook.github.io/react/docs/higher-order-components.html]()
+1. [https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e]()

@@ -13,7 +13,7 @@ export default function Page() {
       <h1 className="font-semibold text-6xl tracking-tighter">
         Waypoints
       </h1>
-      <p className="mb-8">Discoveries I've made a long the way</p>
+      <p className="mb-8">Discoveries I've made a long the way.</p>
       <PostsList metaListPromise={posts} />
     </section>
   );
