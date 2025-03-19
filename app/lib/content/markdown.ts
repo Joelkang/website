@@ -6,7 +6,7 @@ import { evaluate } from "@mdx-js/mdx";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import type { FC } from "react";
-import type { PostMetadata } from ".";
+import type { ArticleMeta } from "./articles";
 const POSTS_DIR = "app/lib/content";
 
 function getMDXFiles(dir: string) {
@@ -34,7 +34,7 @@ async function extractMdFrontmatter(rawContent: string) {
     jsxs: () => "",
     remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
   });
-  return frontmatter as PostMetadata;
+  return frontmatter as ArticleMeta;
 }
 
 export async function listMdxPosts() {
@@ -56,7 +56,7 @@ export async function listMdxPosts() {
 
 export async function importMdxPost(slug: string) {
   try {
-    const promise: { default: FC; frontmatter: PostMetadata } = await import(
+    const promise: { default: FC; frontmatter: ArticleMeta } = await import(
       `${POSTS_DIR}/${slug}.mdx`
     );
     const { default: Post, frontmatter } = promise;

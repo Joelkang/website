@@ -1,9 +1,9 @@
-import { listPostsMeta } from "@/lib/content";
+import { listArticlesMeta } from "@/lib/content/articles";
 
 export const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 export default async function sitemap() {
-  const posts = (await listPostsMeta()).map((post) => ({
+  const posts = (await listArticlesMeta()).map((post) => ({
     url: post.url,
     lastModified: post.publishedAt,
   }))

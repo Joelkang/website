@@ -1,17 +1,21 @@
-import { PostsList } from "@/lib/content/posts-list";
-import { listPostsMeta } from "@/lib/content";
+import { ArticlesList } from "@/waypoints/articles-list";
+import { PostsList } from "@/pitstops/posts-list";
+import { listArticlesMeta } from "@/lib/content/articles";
 import Colophon from "./colophon.mdx";
-import { Brain, Map as MapIcon } from "lucide-react";
+
 import { SiGithub, SiBluesky } from "@icons-pack/react-simple-icons";
+import { listPosts } from "./lib/content/atproto";
 
 export default function Page() {
-  const posts = listPostsMeta();
+  const posts = listPosts(5);
+  const articles = listArticlesMeta(3);
+
   return (
     <section>
       <h1 className="text-6xl font-semiboldtracking-tighter">Joel Kang</h1>
       <div className="mb-8 text-lg flex flex-col">
-        <h2 className="text-white/50">
-          Product Engineer × Context Cartographer
+        <h2 className="-mt-1 text-white/50 mb-1">
+          Context Cartographer × Product Engineer
         </h2>
         <div className="flex gap-2">
           <a
@@ -34,8 +38,12 @@ export default function Page() {
         <Colophon />
       </section>
       <div className="my-8">
+        <h2 className="text-xl mb-4 font-semibold">Latest Pitstops</h2>
+        <PostsList listPromise={posts} />
+      </div>
+      <div className="my-8">
         <h2 className="text-xl mb-4 font-semibold">Latest Waypoints</h2>
-        <PostsList metaListPromise={posts} show={5} />
+        <ArticlesList listPromise={articles} show={5} />
       </div>
     </section>
   );

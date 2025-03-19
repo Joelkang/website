@@ -1,5 +1,5 @@
-import { PostsList } from "@/lib/content/posts-list";
-import { listPostsMeta } from "../lib/content";
+import { ArticlesList } from "@/waypoints/articles-list";
+import { listArticlesMeta } from "@/lib/content/articles";
 
 export const metadata = {
   title: "Blog",
@@ -7,14 +7,12 @@ export const metadata = {
 };
 
 export default function Page() {
-  const posts = listPostsMeta();
+  const posts = listArticlesMeta();
   return (
     <section>
-      <h1 className="font-semibold text-6xl tracking-tighter">
-        Waypoints
-      </h1>
+      <h1 className="font-semibold text-6xl tracking-tighter">Waypoints</h1>
       <p className="mb-8">Discoveries I've made a long the way.</p>
-      <PostsList metaListPromise={posts} />
+      <ArticlesList listPromise={posts} />
     </section>
   );
 }

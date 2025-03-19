@@ -1,10 +1,10 @@
 import { baseUrl } from "@/sitemap";
-import { listPostsMeta } from "@/lib/content";
+import { listArticlesMeta } from "@/lib/content/articles";
 
 export const dynamic = 'force-static'
 
 export async function GET() {
-  const allPosts = await listPostsMeta();
+  const allPosts = await listArticlesMeta();
 
   const itemsXml = allPosts
     .sort((a, b) => {

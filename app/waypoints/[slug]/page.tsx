@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
-import { listPostsMeta, importMdxPost } from "@/lib/content";
+import { listArticlesMeta, importMdxPost } from "@/lib/content/articles";
 import { baseUrl } from "app/sitemap";
 import { formatDate } from "@/lib/utils/dates";
 import { ExternalLink } from "lucide-react";
 
 export async function generateStaticParams() {
-  const posts = await listPostsMeta();
+  const posts = await listArticlesMeta();
 
   return posts.map((post) => ({
     slug: post?.slug,

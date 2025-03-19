@@ -1,4 +1,4 @@
-import type { PostMetadata } from ".";
+import type { ArticleMeta } from "./articles";
 
 type DevToArticle = {
   type_of: "article";
@@ -75,6 +75,6 @@ export async function listDevToPosts() {
         summary: post.description,
         url: post.canonical_url,
         slug: post.slug,
-      }) satisfies PostMetadata,
+      }) satisfies ArticleMeta,
   );
 }

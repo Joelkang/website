@@ -8,6 +8,9 @@ const navItems = {
   "/landmarks": {
     name: "landmarks",
   },
+  "/pitstops": {
+    name: "pitstops",
+  },
 };
 
 export function Navbar() {
