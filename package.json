@@ -6,8 +6,8 @@
     "start": "next start",
     "clean": "rm -Rf .next .open-next",
     "pages:build": "pnpm dlx @cloudflare/next-on-pages",
-    "preview": "pnpm pages:build && wrangler pages dev",
-    "deploy": "pnpm pages:build && wrangler pages deploy",
+    "preview:pages": "pnpm pages:build && wrangler pages dev",
+    "deploy:pages": "pnpm pages:build && wrangler pages deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
