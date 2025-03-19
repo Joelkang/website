@@ -34,7 +34,7 @@ export default function Page() {
         <Colophon />
       </section>
       <div className="my-8">
-        <h2 className="text-xl mb-4 font-semibold">Latest thoughts</h2>
+        <h2 className="text-xl mb-4 font-semibold">Latest Waypoints</h2>
         <PostsList metaListPromise={posts} show={5} />
       </div>
     </section>
