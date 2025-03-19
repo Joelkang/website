@@ -1,33 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
   "name": "website",
   "compatibility_date": "2024-12-30",
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS",
-  },
-  "kv_namespaces": [
-    {
-      "binding": "NEXT_CACHE_WORKERS_KV",
-      "id": "aa0ec1096acf4e04a6ce5e1a37b3d239"
-    }
-  ],
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 0.5
-  },
-  "routes": [
-    {
-      "pattern": "joelkang.com",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.joelkang.com",
-      "custom_domain": true
-    }
-  ]
+  "pages_build_output_dir": ".vercel/output/static"
 }
