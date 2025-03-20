@@ -1,26 +1,57 @@
-import { AtpAgent, AppBskyFeedPost } from "@atproto/api";
+import { AtpAgent, AppBskyFeedPost, RichText } from "@atproto/api";
 
-export async function listPosts(count?: number) {
-  const agent = new AtpAgent({
-    service: "https://bsky.social",
-  });
+export const agent: AtpAgent = new AtpAgent({
+  service: "https://bsky.social",
+});
+async function login() {
+  if (agent.hasSession && agent.session)
+    return (await agent.resumeSession(agent.session)).data;
+
   const me = await agent.login({
     identifier: "joel@joelkang.com",
     password: `${process.env.BLUESKY_PASSWORD}`,
   });
 
   if (!me.success) throw me.data;
+  return me.data;
+}
 
+export async function listPosts(count?: number) {
+  const me = await login();
   const feedResp = await agent.app.bsky.feed.getAuthorFeed({
-    actor: me.data.did,
+    actor: me.did,
     filter: "posts_and_author_threads",
   });
   if (!feedResp.success) throw feedResp.data;
 
-  return feedResp.data.feed
-    .filter((feedItem) => {
-      const isMine = feedItem.post.author.did === me.data.did;
-      return isMine && AppBskyFeedPost.isRecord(feedItem.post.record);
-    })
-    .slice(0, count);
+  const posts = await Promise.all(
+    feedResp.data.feed
+      .filter((feedItem) => {
+        const isMine = feedItem.post.author.did === me.did;
+        return isMine && AppBskyFeedPost.isRecord(feedItem.post.record);
+      })
+      .map(async (feedPost) => {
+        const post = feedPost.post;
+        const validation = AppBskyFeedPost.validateRecord(post.record);
+        if (!validation.success) return null;
+        const record = validation.value;
+        const rt = new RichText(record);
+        // await rt.detectFacets(agent);
+        // const segments = Array.from(rt.segments());
+
+        console.log({
+          post,
+          record,
+          //  segments
+        });
+
+        return {
+          ...post,
+          record,
+        };
+      }),
+  );
+
+  return posts.filter((post) => !!post).slice(0, count);
 }
+

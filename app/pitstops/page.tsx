@@ -1,11 +1,13 @@
 import { PostsList } from "./posts-list";
 import { listPosts } from "@/lib/content/atproto";
-import React from "react";
+import React, { Suspense } from "react";
 
 export const metadata = {
   title: "Pit stops",
   description: "Musings and outbursts",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function PitStops() {
   const posts = listPosts();
@@ -13,7 +15,9 @@ export default async function PitStops() {
     <section>
       <h1 className="font-semibold text-6xl tracking-tighter">Pitstops</h1>
       <p className="mb-8">Musings and outbursts</p>
-      <PostsList listPromise={posts} />
+      <Suspense fallback={"Fetching..."}>
+        <PostsList listPromise={posts} />
+      </Suspense>
     </section>
   );
 }

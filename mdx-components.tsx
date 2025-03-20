@@ -16,6 +16,7 @@ function slugify(str: string) {
     .replace(/\-\-+/g, "-"); // Replace multiple - with single -
 }
 
+
 function createHeading(level: number) {
   const Heading = ({ children }) => {
     const slug = slugify(children);
