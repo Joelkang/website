@@ -6,40 +6,31 @@ import { AppBskyEmbedExternal } from "@atproto/api";
 import { Link } from "@/components/link";
 import { use } from "react";
 import { RichText } from "@atproto/api";
-import { agent } from "@/lib/content/atproto";
 
 export function PostsList({
   listPromise,
 }: { listPromise: ReturnType<typeof listPosts> }) {
   const posts = use(listPromise);
-  const hydratedPosts = use(
-    Promise.all(
-      posts.map(async (post) => {
-        const record = post.record;
-        const rt = new RichText(record);
-        await rt.detectFacets(agent);
+  const hydratedPosts = posts.map((post) => {
+    const record = post.record;
+    const rt = new RichText(record);
 
-        const externalEmbedValidation = AppBskyEmbedExternal.validateMain(
-          record.embed,
-        );
-        const externalEmbed =
-          externalEmbedValidation.success &&
-          externalEmbedValidation.value.external;
+    const externalEmbedValidation = AppBskyEmbedExternal.validateMain(
+      record.embed,
+    );
+    const externalEmbed =
+      externalEmbedValidation.success && externalEmbedValidation.value.external;
 
-        return {
-          ...post,
-          record: {
-            ...record,
-            rt,
-            externalEmbed,
-          },
-        };
-      }),
-    ),
-  );
-
-  console.log({ hydratedPosts });
-
+    return {
+      ...post,
+      record: {
+        ...record,
+        rt,
+        externalEmbed,
+      },
+    };
+  });
+    
   return (
     <div className="grid grid-cols-[max-content_1fr] gap-4">
       {hydratedPosts.map((post) => {
@@ -63,7 +54,11 @@ export function PostsList({
                 {Array.from(rt.segments()).map((segment) => {
                   if (segment.isLink() && segment.link)
                     return (
-                      <Link key={segment.text} href={segment.link?.uri}>
+                      <Link
+                        className="text-brand hover:underline"
+                        key={segment.text}
+                        href={segment.link?.uri}
+                      >
                         {segment.text}
                       </Link>
                     );
@@ -71,8 +66,9 @@ export function PostsList({
                   if (segment.isMention() && segment.mention?.did)
                     return (
                       <Link
+                        className="text-brand hover:underline"
                         key={segment.text}
-                        href={`https://bsky.app/user/${segment.mention.did}`}
+                        href={`https://bsky.app/profile/${segment.mention.did}`}
                       >
                         {segment.text}
                       </Link>

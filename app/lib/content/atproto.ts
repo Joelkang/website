@@ -1,8 +1,9 @@
 import { AtpAgent, AppBskyFeedPost, RichText } from "@atproto/api";
 
-export const agent: AtpAgent = new AtpAgent({
+const agent: AtpAgent = new AtpAgent({
   service: "https://bsky.social",
 });
+
 async function login() {
   if (agent.hasSession && agent.session)
     return (await agent.resumeSession(agent.session)).data;
@@ -35,15 +36,6 @@ export async function listPosts(count?: number) {
         const validation = AppBskyFeedPost.validateRecord(post.record);
         if (!validation.success) return null;
         const record = validation.value;
-        const rt = new RichText(record);
-        // await rt.detectFacets(agent);
-        // const segments = Array.from(rt.segments());
-
-        console.log({
-          post,
-          record,
-          //  segments
-        });
 
         return {
           ...post,

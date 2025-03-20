@@ -5,6 +5,8 @@ import Colophon from "./colophon.mdx";
 
 import { SiGithub, SiBluesky } from "@icons-pack/react-simple-icons";
 import { listPosts } from "./lib/content/atproto";
+import { Link } from "@/components/link";
+import { Suspense } from "react";
 
 export default function Page() {
   const posts = listPosts(5);
@@ -18,20 +20,18 @@ export default function Page() {
           Context Cartographer × Product Engineer
         </h2>
         <div className="flex gap-2">
-          <a
+          <Link
             href="https://github.com/joelkang"
-            rel="noopener noreferrer"
-            className="inline-flex items-baseline text-white/50 hover:text-brand"
+            className="inline-flex items-baseline text-white/50"
           >
             <SiGithub size={20} />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://bsky.app/profile/joelkang.com"
-            rel="noopener noreferrer"
-            className="inline-flex items-baseline text-white/50 hover:text-brand"
+            className="inline-flex items-baseline text-white/50 "
           >
             <SiBluesky size={20} />
-          </a>
+          </Link>
         </div>
       </div>
       <section className="prose prose-invert prose-xl leading-normal mb-4">
@@ -39,11 +39,15 @@ export default function Page() {
       </section>
       <div className="my-8">
         <h2 className="text-xl mb-4 font-semibold">Latest Pitstops</h2>
-        <PostsList listPromise={posts} />
+        <Suspense fallback="Fetching posts...">
+          <PostsList listPromise={posts} />
+        </Suspense>
       </div>
       <div className="my-8">
         <h2 className="text-xl mb-4 font-semibold">Latest Waypoints</h2>
-        <ArticlesList listPromise={articles} show={5} />
+        <Suspense fallback="Fetching articles...">
+          <ArticlesList listPromise={articles} show={5} />
+        </Suspense>
       </div>
     </section>
   );
