@@ -6,7 +6,6 @@ export const metadata = {
   title: "Pit stops",
   description: "Musings and outbursts",
 };
-
 export default async function PitStops() {
   const posts = listPosts();
   return (
