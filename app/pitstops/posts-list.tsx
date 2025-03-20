@@ -76,6 +76,7 @@ export function PostsList({
                     );
 
                   return segment.text.split("\n").map((textPart, idx, arr) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: safe for text
                     <React.Fragment key={`${textPart}-${idx}`}>
                       {textPart}
                       {idx < arr.length - 1 && <br />}

@@ -7,8 +7,6 @@ export const metadata = {
   description: "Musings and outbursts",
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function PitStops() {
   const posts = listPosts();
   return (

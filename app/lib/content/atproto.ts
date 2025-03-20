@@ -1,4 +1,4 @@
-import { AtpAgent, AppBskyFeedPost, RichText } from "@atproto/api";
+import { AtpAgent, AppBskyFeedPost } from "@atproto/api";
 
 const agent: AtpAgent = new AtpAgent({
   service: "https://bsky.social",
