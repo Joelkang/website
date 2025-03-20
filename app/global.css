@@ -87,8 +87,8 @@ table {
     }
 
     .anchor {
-      @apply absolute invisible no-underline;
-
+      @apply absolute  no-underline;
+      color: transparent;
       margin-left: -1em;
       padding-right: 0.5em;
       width: 80%;
@@ -96,12 +96,12 @@ table {
       cursor: pointer;
 
       &::before {
-        @apply text-neutral-300 dark:text-neutral-700;
+        @apply text-neutral-300 dark:text-neutral-700 transition-all opacity-0 hover:text-brand;
         content: "#";
       }
 
-      .prose *:hover & {
-        @apply visible;
+      .prose *:hover &::before {
+        @apply opacity-100;
       }
     }
 
