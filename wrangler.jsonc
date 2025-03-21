@@ -9,5 +9,5 @@
   "vars": {
     "NODE_VERSION": "23.9.0",
     "PNPM_VERSION": "10.6.5"
-  },
+  }
 }
