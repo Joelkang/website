@@ -1,7 +1,6 @@
 import createMDX from "@next/mdx";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -18,7 +17,3 @@ const withMDX = createMDX({
 });
 
 export default withMDX(nextConfig);
-
-if (process.env.NODE_ENV === "development") {
-  await setupDevPlatform();
-}
