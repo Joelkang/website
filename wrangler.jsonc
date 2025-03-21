@@ -7,7 +7,7 @@
   "compatibility_date": "2024-12-30",
   "pages_build_output_dir": ".vercel/output/static",
   "vars": {
-    "NODE_VERSION": "22.13.10",
+    "NODE_VERSION": "22.9.3",
     "PNPM_VERSION": "10.6.5"
   }
 }
