@@ -1,7 +1,7 @@
 import { baseUrl } from "@/sitemap";
 import { listArticlesMeta } from "@/lib/content/articles";
 
-// export const dynamic = 'force-static'
+export const dynamic = "force-static";
 
 export async function GET() {
   const allPosts = await listArticlesMeta();
