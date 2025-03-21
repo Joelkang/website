@@ -1,3 +1,5 @@
+"use server";
+
 import { AtpAgent, AppBskyFeedPost } from "@atproto/api";
 
 const agent: AtpAgent = new AtpAgent({
