@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -35,7 +35,8 @@
     "app/sitemap.ts"
     ],
   "types": [
-    "@cloudflare/workers-types/2024-07-29"
+    "@cloudflare/workers-types/2023-07-01",
+    "node"
   ],
   "exclude": ["node_modules"]
 }

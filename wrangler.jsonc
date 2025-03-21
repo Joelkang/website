@@ -1,13 +1,13 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "website",
-  "compatibility_date": "2024-12-30",
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "compatibility_date": "2024-12-30",
   "pages_build_output_dir": ".vercel/output/static",
   "vars": {
-    "NODE_VERSION": "23.9.0",
+    "NODE_VERSION": "22.13.10",
     "PNPM_VERSION": "10.6.5"
   }
 }
