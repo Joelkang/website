@@ -1,0 +1,167 @@
+---
+title: The vibes are off
+publishedAt: 2025-04-05
+summary: Are the vibes in vibe coding in the wrong place?
+---
+
+I think [Kaparthy got it
+wrong](https://x.com/karpathy/status/1886192184808149383?lang=en).
+
+Reading the entire X post, one would probably find familarity in his experience,
+and agree that his insight is fundamentally spot on. But, like he says in his
+conclusion (emphasisis mine):
+
+> it's not really coding - I just see stuff, say stuff, run stuff, and copy
+> paste stuff, and it **mostly** works.
+
+The issue is calling it "coding" at all, when (as he asserts initially), that
+one actually
+
+> forget[s] that the code even exists.
+
+Regardless of whether you think of it as coding, I think the fundamental mistake
+we're all making is attaching the _vibe_  part of "vibe coding" to the wrong
+thing. 
+
+~
+
+Let's start by considering (and then shelving) the _coding_ part of this new way
+of developing software.
+
+The added layer of abstraction afforded to us by tools like Loveable, Bolt and
+Replit, seem closer to an evolution of software engineering praxis trending
+towards more declarative patterns, rather than a revolution of programming
+entirely. 
+
+Some readers may be familiar with the "don't call us, we'll call you" principle
+of Inversion of Control (IoC), in which control flow is yielded upwards rather
+than propagating downwards.
+
+IoC via dependency injection (DI) has been around for a while, gaining
+popularity in [Java](https://martinfowler.com/articles/injection.html) thanks to
+the [Spring
+Framework](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html),
+and bubbling up to Frontend engineering in frameworks like
+[AngularJs](https://docs.angularjs.org/guide/di) and
+[EmberJS](https://guides.emberjs.com/release/applications/dependency-injection/). 
+
+The core concept of DI, is that instead of an object instantiating a dependency
+that it needs--thereby coupling the creation of that dependency to the
+call-site--the recieving object simply declares the interface of the dependency
+that it actually needs, relegating the construction of that dependency
+elsewhere. 
+
+This provides two key benefits: 
+
+1. **separation of concerns**, because the consumer doesn't have to know
+   anything about the dependency other than the declared interface;
+2. **polymorphism**, since any implementor of the declared interface can be
+   injected as a dependency (e.g. a mock object during test-time).
+
+More recently, libraries like [React](https://react.dev/learn/thinking-in-react)
+expedited the front-end migration away from an imperative paradigm dominated by
+jQuery, towards a more declarative and idiomatic HTML-like mental model.
+
+It's no mistake that as software becomes more and more complex, the levels of
+abstraction step away from the "how" towards the "what". 
+
+Instead of the error-prone process of following specific steps and incantations,
+developers declare the output (or outcome) that they desire, and leave a well
+designed compiler, injector or framework to do the heavy lifting.
+
+~
+
+Therein lies the crux of our problem. 
+
+The _coding_ part of vibe coding is actually still pretty structured, and
+doesn't involve any vibes at all--you declare what you want to achieve, you just
+use this new programming language called English.
+
+You can be as
+[terse](https://www.linkedin.com/posts/reidhoffman_i-asked-replit-to-clone-linkedin-just-activity-7313967729496018944-WLk1)
+or as [verbose](https://lovable.dev/blog/2025-01-16-lovable-prompting-handbook)
+as you want, and the degree to which you are able to describe your desired
+outcome affects the quality of the output. When there are errors, you may point
+to specific parts of your application, or share the exact error message, and
+tell the model to Just Fix It™. 
+
+But these are specific and known tasks. You know exactly what you want, and you
+instruct the model with certainty. As far as I know, no one prompts an LLM to
+"surprise me" when vibe coding, something that we frequently do when we prompt
+the human intelligences in our lives. (But feel free to correct me if you do.)
+
+The issue is that, with such tools, we're still doing "vibe evaluations". Based
+on your experience, expertise, and taste, you assess the outputs and ask
+yourself a few questions:
+
+1. Is the output close enough to what I described in my prompt?
+1. How far is this output from an ideal in order to achieve the outcomes that I
+   want from my application / website?
+1. What else can I tell the model to improve on?
+
+Hopefully you'll notice that these are not falsifiable questions. They're
+subjective, the options are endless, and the feedback loop you are in does not
+have a clear, asymptotic end-game.
+
+~
+
+Unlike in pre-generative programming, these new declarative tools do not
+monotically decrease in error rate. 
+
+When I use a compiler, framework or factory in my coding workflow, I know that
+there's a fixed list of errors I can whittle down so that my application will
+work again. But when I'm coding with an LLM, there are fewer guarantees that new
+errors won't randomly appear.
+
+**_This_** is where the vibes come in. 
+
+Because we've now inverted control of thinking/reasoning back to a computer,
+what were previously beneficial are now causing uncertainty in a field powered
+by control and causal expectations.
+
+While previously we could interrogate our software development colleagues about
+their thought processes, we've now completely separated the concerns of the
+"how" and the "what" since we don't really know what these LLMs are doing.
+Polymorphism corrupts into hallucinations that don't engender trust and
+confidence.
+
+Current explorations in control exist as bandaids on top of these probabilistic
+systems: guardrails, guard models and prompting best practices act to force
+determinism out of a statistical machine, but it keeps finding new ways to
+surprise us. 
+
+~
+
+Evaluation has always been a little bit vibey, though. What passes muster for
+trendy, beautiful, or good, is an ongoing human project. 
+
+As a species, we construct descriptive frameworks and prescriptive philosophies,
+bundling them into different *schools of thought*, *methodologies* and
+*religions* to artifically demarcate what is [beautiful and
+good](https://pubmed.ncbi.nlm.nih.gov/4655540/). But what is good now, may not
+always be good, and what was once cringe, is [cool
+again](https://www.tiktok.com/@eugbrandstrat/video/7486657389567954183).
+
+When we evaluate the outputs of our human colleagues, we lean on the protections
+of education and meritocracy to convince ourselves that these evaluations will
+lead to better outcomes and translate to career progression (for them and for
+us). Pull requests are more about [context
+sharing](https://graphite.dev/blog/pull-request-best-practices#the-bigger-picture)
+than catching bugs, which can already be automated away, or delegated to
+existing tools. Moving up the automation/abstraction ladder doesn't change the
+fact that as long as evaluations are done by humans, there is an aspect of bias
+and subjectivity.
+
+What **_is_** interesting (and the topic of another post) is when we completely
+relegate the responsibility of performing evaluations:
+
+> I "Accept All" always, I don't read the diffs anymore.
+
+But until that becomes admissible beyond hobby projects, this actually appears
+just business as usual. Instead of vibe coding, we're simply declaratively
+coding, this time just in English. We _are_ "vibe perceiving", "vibe assessing"
+and "vibe evaluating", but this seems no different than the forms not prefixed
+with "vibe"s.
+
+Perhaps, then, this is not a _new_ paradigm, but rather a continuation of how
+we've always been: just out here vibin'.
