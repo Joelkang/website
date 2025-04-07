@@ -30,7 +30,7 @@ export async function generateMetadata(props: PageProps) {
   } = post.metadata;
   const ogImage = image
     ? image
-    : `${baseUrl}/og?title=${new URLSearchParams({
+    : `${baseUrl}/og?${new URLSearchParams({
         title,
         desc: description,
       })}`;
